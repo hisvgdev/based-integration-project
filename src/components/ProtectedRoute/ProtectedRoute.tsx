@@ -1,3 +1,4 @@
+import { Layout } from '@components/Layout/Layout';
 import { Navigate } from 'react-router-dom';
 
 import { useAuth } from '../../hooks/useAuth';
@@ -14,7 +15,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
       return <Navigate to={RoutePath.AUTH} />;
    }
 
-   return children;
+   return <Layout>{children}</Layout>;
 };
 
 export default ProtectedRoute;

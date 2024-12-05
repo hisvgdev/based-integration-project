@@ -1,3 +1,4 @@
+import { Loader } from '@components/Loader/Loader';
 import ProtectedRoute from '@components/ProtectedRoute/ProtectedRoute';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
@@ -5,30 +6,43 @@ import { createBrowserRouter } from 'react-router-dom';
 import { RoutePath } from '../types/RoutePath.enum';
 
 const LazyAuthPage = lazy(() => import('@pages/AuthPage/AuthPage'));
+const LazyRegisterPage = lazy(() => import('@pages/RegisterPage/RegisterPage'));
+const LazyMainPage = lazy(() => import('@pages/MainPage/MainPage'));
+const LazyNotFoundPage = lazy(() => import('@pages/NotFoundPage/NotFoundPage'));
 
 export const routerConfig = createBrowserRouter([
    {
+      path: RoutePath.REGISTER,
+      element: (
+         <Suspense fallback={<Loader />}>
+            <LazyRegisterPage />
+         </Suspense>
+      ),
+   },
+   {
       path: RoutePath.AUTH,
       element: (
-         <Suspense fallback={<div>loading...</div>}>
+         <Suspense fallback={<Loader />}>
             <LazyAuthPage />
          </Suspense>
       ),
    },
    {
-      path: RoutePath.REGISTER,
+      path: RoutePath.MAIN,
       element: (
-         <Suspense fallback={<div>loading...</div>}>
-            <LazyAuthPage />
-         </Suspense>
+         <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+               <LazyMainPage />
+            </Suspense>
+         </ProtectedRoute>
       ),
    },
    {
       path: RoutePath.NOT_FOUND,
       element: (
-         <ProtectedRoute>
-            <div>not found</div>
-         </ProtectedRoute>
+         <Suspense fallback={<Loader />}>
+            <LazyNotFoundPage />
+         </Suspense>
       ),
    },
 ]);

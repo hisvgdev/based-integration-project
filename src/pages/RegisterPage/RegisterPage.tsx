@@ -1,9 +1,9 @@
-import { LoginForm } from '@components/LoginForm/LoginForm';
+import { AuthForm } from '@components/AuthForm/AuthForm';
 import { Link } from 'react-router-dom';
 
 import { RoutePath } from '../../types/RoutePath.enum';
 
-export default function AuthPage() {
+export default function RegisterPage() {
    return (
       <section className="w-full h-screen flex flex-col justify-center items-center">
          <div className="flex flex-col items-center gap-4">
@@ -12,18 +12,23 @@ export default function AuthPage() {
                   BASE
                </h4>
             </div>
-            <LoginForm />
+            <div>
+               <h2 className="font-inter text-3xl text-black bg-white antialiased font-feature-default">
+                  Регистрация
+               </h2>
+            </div>
+            <AuthForm />
          </div>
          <div className="flex flex-col items-center">
             <div>
                <h4 className="font-inter text-base text-black bg-white antialiased font-feature-default">
-                  Еще нет аккаунт?
+                  Уже есть аккаунт?
                </h4>
             </div>
             <div>
-               <Link to={RoutePath.REGISTER}>
-                  <button type="button" className="text-[#7D7D7D] text-md">
-                     Зарегестрироваться
+               <Link to={RoutePath.AUTH}>
+                  <button type="button" className="text-[#7D7D7D] text-sm">
+                     Войти
                   </button>
                </Link>
             </div>

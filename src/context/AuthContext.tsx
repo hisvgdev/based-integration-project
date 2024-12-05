@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useState, useCallback } from 'react';
+import {
+   createContext,
+   ReactNode,
+   useState,
+   useCallback,
+   useEffect,
+} from 'react';
 
 import { IAuthContextType } from './AuthContext.types';
 
@@ -10,21 +16,44 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
    const [isAuthenticated, setIsAuthenticated] = useState(false);
    const [error, setError] = useState<string | null>(null);
 
-   const loginUser = useCallback(async (username: string, password: string) => {
-      try {
-         setError(null);
-         if (username && password) {
-            setIsAuthenticated(true);
-         } else {
-            throw new Error('Invalid login username or password');
+   const loginUser = useCallback(
+      async (username: string, password: string, currentlyUser?: any) => {
+         try {
+            setError(null);
+            if (currentlyUser) {
+               if (
+                  username === currentlyUser.username &&
+                  password === currentlyUser.password
+               ) {
+                  console.log(true);
+                  setIsAuthenticated(true);
+               } else {
+                  throw new Error('Invalid login username or password');
+               }
+            } else {
+               return;
+            }
+         } catch (err) {
+            setIsAuthenticated(false);
+            console.log(false);
+            setError((err as Error).message);
          }
-      } catch (err) {
-         setIsAuthenticated(false);
-         setError((err as Error).message);
+      },
+      []
+   );
+
+   useEffect(() => {
+      const currentlyUser = JSON.parse(
+         localStorage.getItem('user_currently_register_data')!
+      );
+      if (currentlyUser) {
+         const { username, password } = currentlyUser;
+         loginUser(username, password, currentlyUser);
       }
-   }, []);
+   }, [loginUser]);
 
    const logout = useCallback(() => {
+      localStorage.removeItem('user_currently_register_data');
       setIsAuthenticated(false);
    }, []);
 
