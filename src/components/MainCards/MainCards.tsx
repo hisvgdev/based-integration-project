@@ -3,12 +3,12 @@ import { mainPageCardsData } from '@constants/MainPage.constants';
 export const MainCards = () => {
    return (
       <div className="flex justify-center py-10">
-         <div className="max-w-[70rem] max-h-[22rem] flex justify-center items-center gap-14">
+         <div className="max-w-[70rem] max-h-[20rem] flex justify-center items-center gap-14">
             {mainPageCardsData.map((itemBox, idx) => {
                return (
                   <div
                      key={itemBox.id}
-                     className="bg-[#F6F7FF] min-w-[34rem] h-full p-6 rounded-3xl"
+                     className="bg-[#F6F7FF] min-w-[34rem] h-full p-6 rounded-[30px]"
                   >
                      <div className="flex justify-between">
                         <div>
@@ -24,7 +24,7 @@ export const MainCards = () => {
                      </div>
                      <div className="flex justify-between pt-2">
                         <div className="max-w-72">
-                           <span className="font-inter text-xl leading-7 antialiased font-feature-default">
+                           <span className="font-inter text-xl leading-7 antialiased font-feature-default text-[#191919]">
                               {itemBox.description}
                            </span>
                         </div>

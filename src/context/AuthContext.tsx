@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
    useEffect(() => {
       const currentlyUser = JSON.parse(
-         localStorage.getItem('user_currently_register_data')!
+         localStorage.getItem('user_currently_register_data') as string
       );
       if (currentlyUser) {
          const { username, password } = currentlyUser;
@@ -53,7 +53,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
    }, [loginUser]);
 
    const logout = useCallback(() => {
-      localStorage.removeItem('user_currently_register_data');
       setIsAuthenticated(false);
    }, []);
 

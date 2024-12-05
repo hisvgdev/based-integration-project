@@ -39,7 +39,9 @@ export const AuthForm = () => {
                      key={inputField.id}
                      control={control}
                      name={inputField.name}
-                     rules={{ required: `${inputField.name} обязательно` }}
+                     rules={{
+                        required: `${inputField.placeholder} обязательно`,
+                     }}
                      render={({ field }) => (
                         <div>
                            {field.name !== 'password' ? (

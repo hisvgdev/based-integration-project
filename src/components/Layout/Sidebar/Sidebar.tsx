@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export const Sidebar = () => {
-   const [isExpandedItem, setIsExpandedItem] = useState(false);
+   const [isExpandedItem, setIsExpandedItem] = useState(true);
    const handleIsExpectedItem = () => setIsExpandedItem(!isExpandedItem);
    return (
       <section>
-         <div className="max-w-64 h-screen border border-r-2 border-[#E6E6E6]">
+         <div className="min-w-64 h-screen border border-r-2 border-[#E6E6E6]">
             <div className="px-7 py-6">
                <div className="flex flex-col items-start gap-4">
                   {expandedRouteItems.map((item, idx) => {

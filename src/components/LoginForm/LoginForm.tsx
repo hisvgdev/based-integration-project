@@ -10,6 +10,7 @@ import { RoutePath } from '../../types/RoutePath.enum';
 export const LoginForm = () => {
    const { loginUser } = useAuth();
    const navigate = useNavigate();
+
    const {
       trigger,
       control,
@@ -47,7 +48,9 @@ export const LoginForm = () => {
                      key={inputField.id}
                      control={control}
                      name={inputField.name}
-                     rules={{ required: `${inputField.name} обязательно` }}
+                     rules={{
+                        required: `${inputField.placeholder} обязательно`,
+                     }}
                      render={({ field }) => (
                         <div>
                            {field.name !== 'password' ? (

@@ -9,6 +9,9 @@ const LazyAuthPage = lazy(() => import('@pages/AuthPage/AuthPage'));
 const LazyRegisterPage = lazy(() => import('@pages/RegisterPage/RegisterPage'));
 const LazyMainPage = lazy(() => import('@pages/MainPage/MainPage'));
 const LazyNotFoundPage = lazy(() => import('@pages/NotFoundPage/NotFoundPage'));
+const LazyAddingItemPage = lazy(
+   () => import('@pages/AddingItemPage/AddingItemPage')
+);
 
 export const routerConfig = createBrowserRouter([
    {
@@ -33,6 +36,16 @@ export const routerConfig = createBrowserRouter([
          <ProtectedRoute>
             <Suspense fallback={<Loader />}>
                <LazyMainPage />
+            </Suspense>
+         </ProtectedRoute>
+      ),
+   },
+   {
+      path: RoutePath.ADDING_ITEM,
+      element: (
+         <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+               <LazyAddingItemPage />
             </Suspense>
          </ProtectedRoute>
       ),
