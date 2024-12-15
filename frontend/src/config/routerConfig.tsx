@@ -12,6 +12,9 @@ const LazyNotFoundPage = lazy(() => import('@pages/NotFoundPage/NotFoundPage'));
 const LazyAddingItemPage = lazy(
    () => import('@pages/AddingItemPage/AddingItemPage')
 );
+const LazyListItemsPage = lazy(
+   () => import('@pages/ListItemsPage/ListItemsPage')
+);
 
 export const routerConfig = createBrowserRouter([
    {
@@ -46,6 +49,16 @@ export const routerConfig = createBrowserRouter([
          <ProtectedRoute>
             <Suspense fallback={<Loader />}>
                <LazyAddingItemPage />
+            </Suspense>
+         </ProtectedRoute>
+      ),
+   },
+   {
+      path: RoutePath.LIST_ITEM,
+      element: (
+         <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+               <LazyListItemsPage />
             </Suspense>
          </ProtectedRoute>
       ),
