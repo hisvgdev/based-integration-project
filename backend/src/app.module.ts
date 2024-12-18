@@ -1,10 +1,22 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ProductModule } from "./product/product.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Product } from "./product/product.entity";
+import { WbIntegrationModule } from './wb-integration/wb-integration.module';
+import { Token } from "./wb-integration/token.entity";
+
+
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'mydatabase.db',
+      entities: [Product, Token],
+      synchronize: true,
+    }),
+    ProductModule,
+    WbIntegrationModule,
+  ],
 })
-export class AppModule {}
+export class AppModule { }

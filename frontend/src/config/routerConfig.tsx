@@ -15,6 +15,9 @@ const LazyAddingItemPage = lazy(
 const LazyListItemsPage = lazy(
    () => import('@pages/ListItemsPage/ListItemsPage')
 );
+const LazyIntegrationPage = lazy(
+   () => import('@pages/IntegrationPage/IntegrationPage')
+);
 
 export const routerConfig = createBrowserRouter([
    {
@@ -59,6 +62,16 @@ export const routerConfig = createBrowserRouter([
          <ProtectedRoute>
             <Suspense fallback={<Loader />}>
                <LazyListItemsPage />
+            </Suspense>
+         </ProtectedRoute>
+      ),
+   },
+   {
+      path: RoutePath.ADDING_INTEGRATION,
+      element: (
+         <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+               <LazyIntegrationPage />
             </Suspense>
          </ProtectedRoute>
       ),

@@ -1,43 +1,88 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 
+import { TableItem } from './components/TableItem/TableItem';
 import { icons } from '../../assets/public/index';
 
+export interface IProductsProps {
+   id: number;
+   brand: string;
+   characteristics: {
+      id: number;
+      name: string;
+      value: string[];
+   }[];
+   createdAt: string;
+   description: string;
+   dimensions: {
+      width: number;
+      height: number;
+      isValid: boolean;
+      length: number;
+   };
+   needKiz: boolean;
+   parentCategory: string;
+   photos: any[];
+   sizes: {
+      chrtID: number;
+      skus: string[];
+      techSize: string;
+      wbSize: string;
+   };
+   source: 'Wildberries' | 'Ozon';
+   subjectID: number;
+   title: string;
+   updatedAt: string;
+   vendorCode: string;
+}
+
 export default function ListItemsPage() {
-   const [products, setProducts] = useState([]);
-   const [loading, setLoading] = useState(false);
+   const [products, setProducts] = useState<IProductsProps[] | null>(null);
+   const [filteredProducts, setFilteredProducts] = useState<
+      IProductsProps[] | null
+   >(null);
+   const [searchText, setSearchText] = useState<string>('');
 
    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-         const response = await fetch(
-            'https://content-api.wildberries.ru/ping',
-            {
-               headers: {
-                  Autorization: `Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IjIwMjQwODE5djEiLCJ0eXAiOiJKV1QifQ.eyJlbnQiOjEsImV4cCI6MTc0MDA4MjYxMywiaWQiOiI4NWI1OTBhYy1iYTM2LTQ2ZmUtYThlZi1iNWY3NTkwYWM3NzYiLCJpaWQiOjQ5ODExMjk0LCJvaWQiOjE3NTkyMywicyI6ODE5MCwic2lkIjoiMzQ2ODY2M2UtYjNkMy00MzY4LWJjNGQtYjA0MDAxYTcyNThiIiwidCI6ZmFsc2UsInVpZCI6NDk4MTEyOTR9.8lzW8ussI8Dj4AsxOoJzGoAHuWqHjUqH1q05haPHts4edCUlPqeFKLVGVHKZLFBLObkdYtkItNq_UpNTDkvCAQ`,
-               },
-            }
-         );
-         const data = await response.json();
-
-         const mergedProducts = data.reduce((acc, product) => {
-            const existingProduct = acc.find(
-               (item) => item.name === product.name
-            );
-            if (existingProduct) {
-               existingProduct.stock += product.stock;
-            } else {
-               acc.push({ ...product });
-            }
-            return acc;
-         }, []);
-
-         setProducts(mergedProducts);
-      } catch (error) {
-         console.error('Ошибка загрузки товаров:', error);
-      } finally {
-         setLoading(false);
+      const getToken = localStorage.getItem('wb-token');
+      if (!getToken) {
+         return;
       }
+      const response = await axios.get('http://localhost:8081/products', {
+         headers: {
+            Authorization: `Bearer ${getToken}`,
+         },
+      });
+      setProducts(response.data);
    };
+
+   const updateProducts = async () => {
+      const getToken = localStorage.getItem('wb-token');
+      if (!getToken) {
+         return;
+      }
+      console.log(getToken);
+      await axios.post(
+         'http://localhost:8081/products/update',
+         {},
+         {
+            headers: {
+               Authorization: `Bearer ${getToken}`,
+            },
+         }
+      );
+      fetchProducts();
+   };
+   useEffect(() => {
+      if (products) {
+         const filtered = products.filter(
+            (product) =>
+               product.title.toLowerCase().includes(searchText.toLowerCase()) ||
+               product.source.toLowerCase().includes(searchText.toLowerCase())
+         );
+         setFilteredProducts(filtered);
+      }
+   }, [searchText, products]);
 
    useEffect(() => {
       fetchProducts();
@@ -58,6 +103,8 @@ export default function ListItemsPage() {
                         <input
                            type="text"
                            placeholder="Поиск"
+                           value={searchText}
+                           onChange={(e) => setSearchText(e.target.value)}
                            className="border border-[#ACACAC] py-2 px-9 rounded-lg placeholder:text-md"
                         />
                      </div>
@@ -78,12 +125,13 @@ export default function ListItemsPage() {
                   <button
                      type="button"
                      className="bg-[#D9D9D9] text-[#7D7D7D] py-2 px-6 rounded-md"
+                     onClick={updateProducts}
                   >
-                     Добавить товар
+                     Обновить таблицу
                   </button>
                </div>
             </div>
-            {/* <div className="w-full bg-red-100 h-1" /> */}
+            <TableItem products={filteredProducts as IProductsProps[]} />
          </div>
       </main>
    );
