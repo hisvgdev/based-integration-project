@@ -19,14 +19,16 @@ export class ProductService {
   // Метод для получения товаров с Wildberries
   async fetchWildberriesProduct() {
     try {
+      // Достаем токен из сервиса который необходим для того чтобы прокинуть его в заголовок запроса
       const token = await this.wbIntegrationService.getToken();
-      console.log('Using token:', token);
+      // Создаем переменную агента чтобы при подключении не ругались ошибки по типу CORS
       const agent = new https.Agent({
         rejectUnauthorized: false,
       });
-
+      // Создаем запрос на получение контент от wildberries
       const response = await lastValueFrom(
         this.httpService.post('https://content-api.wildberries.ru/content/v2/get/cards/list?locale=ru', {
+          // создаем обязательное к запросу тело для отправки его вместе с запросом на конечный breakpoint
           settings: {
             sort: {
               ascending: false
@@ -45,11 +47,12 @@ export class ProductService {
             }
           }
         }, {
+          // добавляем в заголовках агента и токен
           headers: { Authorization: `Bearer ${token}` },
           httpsAgent: agent,
         })
       );
-
+      // формируем для удобства фронтенд приложению новый массив и отдаем его соответственно
       if (response.data && Array.isArray(response.data.cards)) {
         return response.data.cards.map((p) => ({
           subjectID: p.subjectID,
@@ -65,16 +68,38 @@ export class ProductService {
           characteristics: p.characteristics || {},
           sizes: p.sizes || {},
         }));
+        // если токен или что-то будет не обнаружено или не подключено выдаст ошибку но запрос сам пройдет
       } else {
         console.error('Invalid response structure from Wildberries:', response.data);
         return [];
       }
+      // если запрос не пройдет отлавливаем это и показываем в консоле
     } catch (error) {
       console.error('Error while fetching Wildberries products:', error.response ? error.response.data : error.message);
       return [];
     }
   }
 
+  // Метод получения складов wildberries
+
+  async fetchGetWarehouseWildberriesProducts() {
+    try {
+      const token = await this.wbIntegrationService.getToken();
+      const agent = new https.Agent({
+        rejectUnauthorized: false
+      })
+      const response = await lastValueFrom(
+        this.httpService.get('https://marketplace-api.wildberries.ru/api/v3/warehouses', {
+          headers: { Authorization: `Bearer ${token}` },
+          httpsAgent: agent,
+        })
+      )
+      return response.data;
+    } catch (error) {
+      console.error("Error while fetching Wildberries Warehouse:", error.response ? error.response.data : error.message)
+      return []
+    }
+  }
 
   // Метод для получения товаров с Ozon
   async fetchOzonProducts() {
@@ -118,9 +143,6 @@ export class ProductService {
   async updateProducts() {
     const wbProducts = await this.fetchWildberriesProduct();
     // const ozonProducts = await this.fetchOzonProducts();
-
-    console.log('Wildberries Products:', wbProducts);
-    // console.log('Ozon Products:', ozonProducts);
 
     const allProducts = [...wbProducts];
 

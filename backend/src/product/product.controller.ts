@@ -10,6 +10,11 @@ export class ProductController {
     return this.productService.getProducts();
   }
 
+  @Get('warehouse-wildberries')
+  async getWarehouseWildberries() {
+    return this.productService.fetchGetWarehouseWildberriesProducts();
+  }
+
   @Post('update')
   async updateProducts() {
     return this.productService.updateProducts();

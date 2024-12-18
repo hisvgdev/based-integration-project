@@ -6,5 +6,6 @@ export enum RoutePath {
 	ADDING_ITEM = '/adding-item',
 	LIST_ITEM = '/list-item',
 	ADDING_INTEGRATION = '/adding-integration',
+
 	NOT_FOUND = '/*',
 }

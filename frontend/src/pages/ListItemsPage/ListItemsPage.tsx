@@ -36,24 +36,34 @@ export interface IProductsProps {
    vendorCode: string;
 }
 
+export interface IWarehouseWildberriesProps {
+   cargoType: number;
+   deliveryType: number;
+   id: number;
+   name: string;
+   officeId: number;
+}
+
 export default function ListItemsPage() {
    const [products, setProducts] = useState<IProductsProps[] | null>(null);
+   const [warehouseWildberries, setWarehouseWildberries] = useState<
+      IWarehouseWildberriesProps[] | null
+   >(null);
    const [filteredProducts, setFilteredProducts] = useState<
       IProductsProps[] | null
    >(null);
    const [searchText, setSearchText] = useState<string>('');
 
    const fetchProducts = async () => {
-      const getToken = localStorage.getItem('wb-token');
-      if (!getToken) {
-         return;
-      }
-      const response = await axios.get('http://localhost:8081/products', {
-         headers: {
-            Authorization: `Bearer ${getToken}`,
-         },
-      });
+      const response = await axios.get('http://localhost:8081/products');
       setProducts(response.data);
+   };
+
+   const fetchWarehouseWildberriesProducts = async () => {
+      const response = await axios.get(
+         'http://localhost:8081/products/warehouse-wildberries'
+      );
+      setWarehouseWildberries(response.data);
    };
 
    const updateProducts = async () => {
@@ -86,6 +96,10 @@ export default function ListItemsPage() {
 
    useEffect(() => {
       fetchProducts();
+   }, []);
+
+   useEffect(() => {
+      fetchWarehouseWildberriesProducts();
    }, []);
 
    return (
