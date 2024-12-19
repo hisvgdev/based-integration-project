@@ -1,22 +1,32 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
+import { ModalOzIntegration } from './components/ModalOzIntegration/ModalOzIntegration';
 import { ModalWbIntegration } from './components/ModalWbIntegration/ModalWbIntegration';
 import { icons } from '../../assets/public/index';
 
 export default function IntegrationPage() {
    const [wbIntegrationIsOpen, setWbIntegrationIsOpen] =
       useState<boolean>(false);
+   const [ozIntegrationIsOpen, setOzIntegrationIsOpen] =
+      useState<boolean>(false);
    const [isConnectedWb, setIsConnectedWb] = useState(false);
    const [isTokenSend, setIsTokenSend] = useState(false);
 
    const [expandedWbInformation, setExpandedWbInformation] = useState(false);
+   const [expandedOzInformation, setExpandedOzInformation] = useState(false);
 
    const handleOpenWbIntegration = () => setWbIntegrationIsOpen(true);
    const handleCloseWbIntegration = () => setWbIntegrationIsOpen(false);
 
-   const toggleExpandedInformation = () =>
+   const handleOpenOzIntegration = () => setOzIntegrationIsOpen(true);
+   const handleCloseOzIntegration = () => setOzIntegrationIsOpen(false);
+
+   const toggleWbExpandedInformation = () =>
       setExpandedWbInformation(!expandedWbInformation);
+
+   const toggleOzExpandedInformation = () =>
+      setExpandedOzInformation(!expandedOzInformation);
 
    const handleCheckIfConnectedWb = async () => {
       const getToken = localStorage.getItem('wb-token');
@@ -55,6 +65,9 @@ export default function IntegrationPage() {
                onClose={handleCloseWbIntegration}
             />
          )}
+         {ozIntegrationIsOpen && (
+            <ModalOzIntegration onClose={handleCloseOzIntegration} />
+         )}
          <section>
             <div>
                <div className="p-4 px-56">
@@ -71,7 +84,7 @@ export default function IntegrationPage() {
                         <div>
                            <button
                               type="button"
-                              onClick={toggleExpandedInformation}
+                              onClick={toggleWbExpandedInformation}
                            >
                               Wildberries
                            </button>
@@ -115,11 +128,19 @@ export default function IntegrationPage() {
                         <img src={icons.ozonLogo} alt="ozon-icon" />
                      </div>
                      <div>
-                        <button type="button">Ozon</button>
+                        <button type="button" onClick={handleOpenOzIntegration}>
+                           Ozon
+                        </button>
                      </div>
                   </div>
                   <div>
-                     <button type="button" className="text-[#7D7D7D]">
+                     <button
+                        type="button"
+                        className="text-[#7D7D7D]"
+                        data-modal-target="integration-oz-modal"
+                        data-modal-toggle="integration-oz-modal"
+                        onClick={handleOpenOzIntegration}
+                     >
                         Подключить
                      </button>
                   </div>

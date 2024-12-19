@@ -126,14 +126,6 @@ export default function ListItemsPage() {
                         <img src={icons.searchIcon} alt="search-icon" />
                      </div>
                   </div>
-                  <div>
-                     <button
-                        type="button"
-                        className="bg-[#E3E3E3] p-2 rounded-md"
-                     >
-                        <img src={icons.filterIcon} alt="search-icon" />
-                     </button>
-                  </div>
                </div>
                <div>
                   <button
